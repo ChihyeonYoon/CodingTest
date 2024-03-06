@@ -10,8 +10,7 @@ def solution(priorities, location):
         while priorities[0][0] != mp:
             tmp = priorities.pop(0)
             priorities.append(tmp)
-        # print(priorities)
-        # break
+        
         if priorities[0][0] == mp:
             p, l = priorities.pop(0)
             answer += 1
