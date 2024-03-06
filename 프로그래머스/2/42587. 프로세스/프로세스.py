@@ -2,7 +2,6 @@ def solution(priorities, location):
     answer = 0
     
     priorities = [(p,i) for i, p in enumerate(priorities)]
-    print(priorities)
 
     while priorities:
         mp = max([p for p,_ in priorities])
