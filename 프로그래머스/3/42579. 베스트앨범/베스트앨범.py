@@ -3,7 +3,6 @@ def solution(genres, plays):
 
     i_g_p = [(i,g,p) for i, (g, p) in enumerate(zip(genres,plays))]
     i_g_p.sort(key=lambda x: x[2], reverse= True)
-    # print(i_g_p)
 
     table = {}
     table_ = {}
@@ -25,11 +24,7 @@ def solution(genres, plays):
     
     table_oder.sort(key=lambda x: x[1],reverse=True)
 
-    # print(table)
-    # print(table_)
-
     for t, p in table_oder:
         answer += table[t]
 
-    # print(answer)
     return answer
