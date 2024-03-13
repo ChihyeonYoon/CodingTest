@@ -1,22 +1,37 @@
+from collections import deque
 def solution(numbers, target):
-    
-    global answer
     answer = 0
+    queue = deque([(0, 0)]) # sum, level
+    while queue:
+        s, l = queue.popleft()
+        if l > len(numbers) or l < 0:
+            break
+        elif l == len(numbers) and s == target:
+            answer += 1
+        queue.append((s+numbers[l-1], l+1))
+        queue.append((s-numbers[l-1], l+1))
+
+    return answer
+
+# def solution(numbers, target):
     
-    def dfs(sum, i):
-        global answer
+#     global answer
+#     answer = 0
+    
+#     def dfs(sum, i):
+#         global answer
 
-        if sum == target and i == len(numbers):
-            answer +=1
-            return
-        if i==len(numbers):
-            return
+#         if sum == target and i == len(numbers):
+#             answer +=1
+#             return
+#         if i==len(numbers):
+#             return
 
-        dfs(sum + numbers[i], i+1)
-        dfs(sum - numbers[i], i+1)
+#         dfs(sum + numbers[i], i+1)
+#         dfs(sum - numbers[i], i+1)
 
-        return
+#         return
 
-    dfs(0,0)
+#     dfs(0,0)
 
-    return answer 
+#     return answer 
