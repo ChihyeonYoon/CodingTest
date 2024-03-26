@@ -1,113 +1,57 @@
 from collections import deque
+def bfs(start_point, end_point, maps):
+        y_len = len(maps)-1
+        x_len = len(maps[0])-1
+        direction = [(-1,0),(1,0),(0,-1),(0,1)]
 
-def bfs(start, end, maps):
-	# 탐색할 방향
-    dy = [0, 1, -1, 0]
-    dx = [1, 0, 0, -1]
-    
-    n = len(maps)       # 세로
-    m = len(maps[0])    # 가로
-    visited = [[False]*m for _ in range(n)]
-    que = deque()
-    flag = False
-    
-    # 초깃값 설정
-    for i in range(n):
-        for j in range(m):
-        	# 출발하고자 하는 지점이라면 시작점의 좌표를 기록함
-            if maps[i][j] == start:      
-                que.append((i, j, 0))    
-                # 별도의 cost 리스트를 만들지 않고 que에 바로 기록(0)
-                visited[i][j] = True
-                flag = True; break 
-                # 시작 지점은 한 개만 존재하기 때문에 찾으면 바로 나옴
-        if flag: break
-                
-    # BFS 알고리즘 수행 (핵심)
-    while que:
-        y, x, cost = que.popleft()
-        
-        if maps[y][x] == end:
-            return cost
-        
-        for i in range(4):
-            ny = y + dy[i]
-            nx = x + dx[i]
-            
-            # maps 범위내에서 벽이 아니라면 지나갈 수 있음
-            if 0<= ny <n and 0<= nx <m and maps[ny][nx] !='X':
-                if not visited[ny][nx]:	# 아직 방문하지 않는 통로라면
-                    que.append((ny, nx, cost+1))
-                    visited[ny][nx] = True
-                    
-    return -1	# 탈출할 수 없다면
-        
-            
+        start_y, start_x = start_point
+        q = deque([(start_y, start_x, 0)]) #(y, x, dist)
+
+        visited = {}
+        visited[(start_y, start_x)]=0
+        # visited_map = [[False for _ in range(len(maps[0]))] for _ in range(len(maps))]
+
+        while q:
+            cur_y, cur_x, cur_dist = q.popleft()
+
+            if (cur_y, cur_x) == end_point:
+                return cur_dist
+            # else:
+                # visited[(cur_y, cur_x)]=cur_dist
+                # visited_map[cur_y][cur_x]=True
+
+            for y, x in direction:
+                next_y, next_x = cur_y+y, cur_x+x
+                # if 0 <= next_y <= y_len and 0 <= next_x <= x_len and visited_map[next_y][next_x]==False:
+                if 0 <= next_y <= y_len and 0 <= next_x <= x_len and (next_y, next_x) not in visited:
+                    if maps[next_y][next_x] != 'X':
+                        q.append((next_y, next_x, cur_dist+1))
+                        visited[(next_y, next_x)]=cur_dist+1
+
+        return None
+
 def solution(maps):
-    path1 = bfs('S', 'L', maps)	# 시작 지점 --> 레버
-    path2 = bfs('L', 'E', maps) # 레버 --> 출구
-    
-    # 둘다 -1 이 아니라면 탈출할 수 있음
-    if path1 != -1 and path2 != -1:
-        return path1 + path2
-        
-   	# 둘중 하나라도 -1 이면 탈출할 수 없음
-    return -1
+    start_point, lever_point, end_point, flag = None,  None,  None, False
 
-# from collections import deque
-# def bfs(start_point, end_point, maps):
-#         y_len = len(maps)-1
-#         x_len = len(maps[0])-1
-#         direction = [(1,0),(0,1),(0,-1),(-1,0)]
+    for y, row in enumerate(maps):
+        for x, s in enumerate(row):
+            if s == 'S':
+                start_point = (y,x)
+            if s == 'L':
+                lever_point = (y,x)
+            if s == 'E':
+                end_point = (y,x)
+            if start_point and lever_point and end_point:
+                flag = True
+                break
+        if flag:
+            break
 
-#         start_y, start_x = start_point
-#         q = deque([(start_y, start_x, 0)]) #(y, x, dist)
-        
-#         visited = {}
-#         # visited_map = [[False for _ in range(len(maps[0]))] for _ in range(len(maps))]
+    dist_s2l = bfs(start_point, lever_point, maps)
 
-#         while q:
-#             cur_y, cur_x, cur_dist = q.popleft()
+    dist_l2e = bfs(lever_point, end_point, maps)
 
-#             if (cur_y, cur_x) == end_point:
-#                 return cur_dist
-#             else:
-#                 visited[(cur_y, cur_x)]=cur_dist
-#                 # visited_map[cur_y][cur_x]=True
-            
-#             for y, x in direction:
-#                 next_y, next_x = cur_y+y, cur_x+x
-#                 # if 0 <= next_y <= y_len and 0 <= next_x <= x_len and visited_map[next_y][next_x]==False:
-#                 if 0 <= next_y <= y_len and 0 <= next_x <= x_len and maps[next_y][next_x] != 'X' :
-#                     if (next_y, next_x) not in visited:
-                        
-#                         q.append((next_y, next_x, cur_dist+1))
-#                         # visited[(cur_y, cur_x)]=cur_dist
-#                         # visited_map[cur_y][cur_x]=True
-#         return None
-
-
-# def solution(maps):
-#     start_point, lever_point, end_point, flag = None,  None,  None, False
-
-#     for y, row in enumerate(maps):
-#         for x, s in enumerate(row):
-#             if s == 'S':
-#                 start_point = (y,x)
-#             if s == 'L':
-#                 lever_point = (y,x)
-#             if s == 'E':
-#                 end_point = (y,x)
-#             if start_point and lever_point and end_point:
-#                 flag = True
-#         if flag:
-#             break
-
-#     dist_s2l = bfs(start_point, lever_point, maps)
-        
-#     dist_l2e = bfs(lever_point, end_point, maps)
-
-#     if dist_s2l == None or dist_l2e == None:
-#         return -1
-#     else:
-#         return dist_s2l+ dist_l2e
+    if dist_s2l == None or dist_l2e == None:
+        return -1
+    else:
+        return dist_s2l+ dist_l2e
