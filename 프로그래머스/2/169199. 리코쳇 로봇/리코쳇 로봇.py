@@ -1,35 +1,36 @@
 from collections import deque
+
 def solution(board):
     answer = -1
-    n, m = len(board), len(board[0])
-    direction = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-    visited = [[False]*m for _ in range(n)]
-    q = deque()
-    
-    for x in range(n):
-        for y in range(m):
-            if board[x][y] == "R":
-                sx, sy = x, y
-    
-    q.append((sx, sy, 0))
-    
-    while q:
-        x, y, level = q.popleft()
-        
-        if board[x][y] == "G":
-            answer = level
-            break
-        
-        # 한방향으로 미끄러져 이동
-        for dx, dy in direction:
-            scope = 1
-            while 1:
-                nx, ny = x+dx*scope, y+dy*scope
-                if nx < 0 or nx >= n or ny < 0 or ny >= m or board[nx][ny] == "D":
-                    if visited[nx-dx][ny-dy] == False:
-                        visited[nx-dx][ny-dy] = True
-                        q.append((nx-dx, ny-dy, level+1))
+    y_len, x_len = len(board), len(board[0])
 
+    for y, line in enumerate(board):
+        for x, w in enumerate(line):
+            if w =='R':
+                start_y, start_x = y, x
+
+    q = deque([(start_y, start_x, 0)])
+    visited = [[False]*x_len for _ in range(y_len)]
+    
+    direction = [(-1,0), (1,0), (0,1), (0,-1)]
+
+    while q:
+        cur_y, cur_x, turn = q.popleft()
+
+        if board[cur_y][cur_x] == "G":
+            answer = turn
+            break
+
+        for dir in direction:
+            dy, dx = dir
+            step = 1
+            while True:
+                next_y, next_x = cur_y+step*dy, cur_x+step*dx
+                if not(0<=next_y<y_len) or not(0<=next_x<x_len) or board[next_y][next_x] == 'D':
+                    if visited[next_y-dy][next_x-dx] == False:
+                        q.append((next_y-dy,next_x-dx,turn+1))
+                        visited[next_y-dy][next_x-dx] = True
                     break
-                scope += 1
+                step +=1
+
     return answer
