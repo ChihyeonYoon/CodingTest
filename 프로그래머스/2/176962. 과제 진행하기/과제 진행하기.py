@@ -31,13 +31,6 @@ def solution(plans):
                 answer.append(cur_lec)
             
             vacant = next_st - (cur_st+cur_rt)
-            # if stack and vacant >= stack[-1][2]:
-            #     lec,_,_=stack.pop()
-            #     print(lec)
-            #     answer.append(lec)
-            #     vacant -= stack[-1][2]
-            # if stack and vacant < stack[-1][2]:
-            #     stack[-1][2] -= vacant
             while vacant and stack:
                 if stack and vacant >= stack[-1][2]:
                     vacant -= stack[-1][2]
