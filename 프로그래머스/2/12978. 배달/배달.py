@@ -2,33 +2,40 @@
 import heapq
 def solution(N, road, K):
     answer = 0
-    graph ={n+1:dict() for n in range(N)}
     
-#     for start, end, weight in road:
-#         if not graph.get(start):
-#             graph[start]={}
-#         if not graph.get(end):
-#             graph[end]={}
+    graph ={}    
+    for start, end, weight in road:
+        if not graph.get(start):
+            graph[start]={}
+        if not graph.get(end):
+            graph[end]={}
             
-#         if graph[start][end] >= weight:
-#             graph[start][end]=weight 
-            
-#         if graph[end][start]>=weight :
-#             graph[end][start]=weight 
-
-    for edge in road:
-        if edge[1] in graph[edge[0]]:
-            if graph[edge[0]][edge[1]]>edge[2]:
-                graph[edge[0]][edge[1]] = edge[2]
-                graph[edge[1]][edge[0]] = edge[2]
-        else:
-            graph[edge[0]][edge[1]] = edge[2]
-            graph[edge[1]][edge[0]] = edge[2]
+        if not graph[start].get(end):
+            graph[start][end] = float('inf')
+        if graph[start][end] >= weight:
+            graph[start][end]=weight    
         
+        if not graph[end].get(start):
+            graph[end][start] = float('inf')
+        if graph[end][start] >= weight:
+            graph[end][start]=weight    
     print(graph)
-    # exit(0)
+        
+
+    # graph ={n+1:dict() for n in range(N)}
+    # for edge in road:
+    #     if edge[1] in graph[edge[0]]:
+    #         if graph[edge[0]][edge[1]]>edge[2]:
+    #             graph[edge[0]][edge[1]] = edge[2]
+    #             graph[edge[1]][edge[0]] = edge[2]
+    #     else:
+    #         graph[edge[0]][edge[1]] = edge[2]
+    #         graph[edge[1]][edge[0]] = edge[2]
+        
+    # print(graph)
+    # exit()
     
-    def dijkstra(graph, start):
+    def dijkstra1(graph, start):
         distances = {node: float('inf') for node in graph}  # start로 부터의 거리 값을 저장하기 위함
         distances[start] = 0  # 시작 값은 0이어야 함
         queue = []
@@ -48,8 +55,26 @@ def solution(N, road, K):
     
         return distances
     
-    distances = dijkstra(graph,1)
+    def dijkstra2(graph, start):
+        costs = {}
+        pq=[]
+        heapq.heappush(pq, (0,start))
+        
+        while pq:
+            cur_cost, cur_node = heapq.heappop(pq)
+            if cur_node not in costs:
+                costs[cur_node] = cur_cost
+                for next_node in graph[cur_node]:
+                    cost = cur_cost + graph[cur_node][next_node]
+                    heapq.heappush(pq, (cost, next_node))
+        return costs
     
+    # distances = dijkstra1(graph,1)
+    # print(distances)
+    distances = dijkstra2(graph,1)
+    print(distances)
+
+
     for v in distances.values():
         if v <= K:
             answer +=1
