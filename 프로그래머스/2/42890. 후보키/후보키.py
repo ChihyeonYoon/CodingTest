@@ -26,10 +26,7 @@ def solution(relation):
                 answers.append(set(candidate))
 
     # print(answers)
-    from collections import deque
-    answers = deque(answers)
-    len_answers = len(answers)  
-
+     
     answers_ = answers.copy()
     
     for i in range(len(answers)):
