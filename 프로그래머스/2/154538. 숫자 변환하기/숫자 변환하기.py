@@ -1,16 +1,7 @@
 from collections import deque
 def solution(x, y, n):
     answer = 0
-
-    # def dfs(x,depth):
-    #     if x == y:
-    #         return depth
-    #     if x >= 1000000:
-    #         return depth
-        
-    #     return min(dfs(x+n,depth+1), 
-    #                dfs(x*2,depth+1),
-    #                dfs(x*3,depth+1))
+    
     if x == y:
         return 0
     
@@ -33,9 +24,6 @@ def solution(x, y, n):
                     q.append((next, cur_depth+1))
                     visited[next] = cur_depth+1
 
-    # answer = dfs(x,1)
     answer = bfs(x)
-
-
 
     return answer if answer else -1
