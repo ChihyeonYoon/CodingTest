@@ -7,6 +7,7 @@ def solution(operations):
     
     for operation in operations:
         ins, v = operation.split(" ")[0], int(operation.split(" ")[1])
+        
         if ins == 'I':
             heappush(min_heap, v)
             heappush(max_heap, (-1)*v)
