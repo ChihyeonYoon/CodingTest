@@ -1,83 +1,86 @@
-# from heapq import heapq,heappop, heappush
 import heapq
 def solution(N, road, K):
     answer = 0
-    
-    graph ={}    
+    graph = {}
     for start, end, weight in road:
         if not graph.get(start):
-            graph[start]={}
+            graph[start] = {}
         if not graph.get(end):
-            graph[end]={}
-            
+            graph[end] = {}
+
         if not graph[start].get(end):
             graph[start][end] = float('inf')
-        if graph[start][end] >= weight:
-            graph[start][end]=weight    
+        if graph[start][end] > weight:
+            graph[start][end] = weight
         
         if not graph[end].get(start):
             graph[end][start] = float('inf')
-        if graph[end][start] >= weight:
-            graph[end][start]=weight    
-    print(graph)
-        
-
-    # graph ={n+1:dict() for n in range(N)}
-    # for edge in road:
-    #     if edge[1] in graph[edge[0]]:
-    #         if graph[edge[0]][edge[1]]>edge[2]:
-    #             graph[edge[0]][edge[1]] = edge[2]
-    #             graph[edge[1]][edge[0]] = edge[2]
-    #     else:
-    #         graph[edge[0]][edge[1]] = edge[2]
-    #         graph[edge[1]][edge[0]] = edge[2]
-        
+        if graph[end][start] > weight:
+            graph[end][start] = weight
     # print(graph)
-    # exit()
+    '''
+    {start:{end:weight}}
     
-    def dijkstra1(graph, start):
-        distances = {node: float('inf') for node in graph}  # start로 부터의 거리 값을 저장하기 위함
-        distances[start] = 0  # 시작 값은 0이어야 함
-        queue = []
-        heapq.heappush(queue, [distances[start], start])  # 시작 노드부터 탐색 시작 하기 위함.
+    {
+        1: {2: 1, 
+            4: 2}, 
+        2: {1: 1, 
+            3: 3, 
+            5: 2}, 
+        3: {2: 3, 
+            5: 1}, 
+        4: {1: 2, 
+            5: 2},
+        5: {2: 2, 
+            3: 1, 
+            4: 2},
+    } 
+    '''
 
-        while queue:  # queue에 남아 있는 노드가 없으면 끝
-            current_distance, current_destination = heapq.heappop(queue)  # 탐색 할 노드, 거리를 가져옴.
-
-            if distances[current_destination] < current_distance:  # 기존에 있는 거리보다 길다면, 볼 필요도 없음
-                continue
-    
-            for new_destination, new_distance in graph[current_destination].items():
-                distance = current_distance + new_distance  # 해당 노드를 거쳐 갈 때 거리
-                if distance < distances[new_destination]:  # 알고 있는 거리 보다 작으면 갱신
-                    distances[new_destination] = distance
-                    heapq.heappush(queue, [distance, new_destination])  # 다음 인접 거리를 계산 하기 위해 큐에 삽입
-    
-        return distances
-    
-    def dijkstra2(graph, start):
-        costs = {}
-        pq=[]
-        heapq.heappush(pq, (0,start))
+    from collections import deque
+    def bfs(graph, start):
         
+        q = deque([(start,0)]) # (node, depth)
+        visited = {start:0} # {node:depth}
+
+        while q:
+            cur_node, cur_depth = q.popleft()
+    
+            for next_node in graph[cur_node]:
+                if next_node not in visited:
+                    next_depth = cur_depth + 1
+                    visited[next_node] = next_depth
+                    q.append((next_node, next_depth))
+
+        return visited
+
+    
+    
+    
+    import heapq
+    def dijkstra(graph, start):
+        pq=[]
+        heapq.heappush(pq, (0,start)) # (weight, node)
+        visited={} # {node:cost}
+
         while pq:
             cur_cost, cur_node = heapq.heappop(pq)
-            if cur_node not in costs:
-                costs[cur_node] = cur_cost
-                for next_node in graph[cur_node]:
-                    cost = cur_cost + graph[cur_node][next_node]
-                    heapq.heappush(pq, (cost, next_node))
-        return costs
-    
-    # distances = dijkstra1(graph,1)
-    # print(distances)
-    distances = dijkstra2(graph,1)
-    print(distances)
-
-
-    for v in distances.values():
-        if v <= K:
-            answer +=1
             
+            if cur_node not in visited:
+                visited[cur_node] = cur_cost
+                for next_node in graph[cur_node]:
+                    next_cost = cur_cost + graph[cur_node][next_node]
+                    heapq.heappush(pq, (next_cost, next_node))
+                    
+        return visited
+    
+    visited = dijkstra(graph,1)
+    print(visited)
+    for cost in visited.values():
+        if cost <= K:
+            answer +=1
 
+    # visited = bfs(graph,1)
+    # print(visited)
+    
     return answer
