@@ -1,18 +1,14 @@
 def solution(s):
-    
-    stack = []
-    
-    for i in s:
-        if i == '(':
-            stack.append('(')
-            
-        if i == ')':
-            try:
+    stack=[]
+    for s_ in s:
+        if s_ == "(":
+            stack.append(s_)
+        else:
+            if stack:
                 stack.pop()
-            except:
+            else:
                 return False
         
-    if len(stack) == 0 :
-        return True
-            
-    return False
+    if stack:
+        return False
+    return True
