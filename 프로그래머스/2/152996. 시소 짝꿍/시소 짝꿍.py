@@ -10,12 +10,11 @@ def solution(weights):
 
     weights = set(weights)
 
-    # iteration 1 
-    for w in weights:
+    for w in weights: # 180
         if w*3/2 in weights: 
-            answer+=counter[w*3/2]*counter[w] 
+            answer+=counter[w*3/2]*counter[w] # counter[270]*counter[180] 
         if w*2 in weights: 
-            answer+=counter[w*2]*counter[w] 
+            answer+=counter[w*2]*counter[w]  # counter[360]*counter[180]
         if w*4/3 in weights:
             answer+=counter[w*4/3]*counter[w]
 
