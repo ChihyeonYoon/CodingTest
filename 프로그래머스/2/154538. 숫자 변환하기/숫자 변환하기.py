@@ -13,8 +13,8 @@ def solution(x, y, n):
 
             if cur_x == y:
                 return cur_depth
-            if x + cur_depth*n >= 1000000:
-                return -1
+            # if cur_x+n >= 1000000:
+            #     return -1
 
             nexts = [cur_x+n,cur_x*2,cur_x*3]
             for next in nexts:
