@@ -19,6 +19,8 @@ def solution(n, lost, reserve):
                 answer +=1
             elif l in reserve_dict and reserve_dict[l] == 1:
                 answer +=1
+            else:
+                continue
         else:
             answer+=1
     print(reserve_dict)
