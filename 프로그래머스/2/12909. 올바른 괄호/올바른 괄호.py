@@ -1,14 +1,17 @@
+from collections import deque
 def solution(s):
-    stack=[]
+    
+    q = deque()
+    
     for s_ in s:
-        if s_ == "(":
-            stack.append(s_)
+        if s_ == '(':
+            q.append(s_)
         else:
-            if stack:
-                stack.pop()
+            if q:
+                q.popleft()
             else:
                 return False
-        
-    if stack:
+    if not q: 
+        return True
+    else:
         return False
-    return True
