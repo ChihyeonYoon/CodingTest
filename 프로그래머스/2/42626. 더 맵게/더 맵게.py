@@ -1,16 +1,17 @@
-from heapq import heapify, heappop, heappush
+from heapq import heapify, heappush, heappop
 def solution(scoville, K):
     answer = 0
     heapify(scoville)
     
-    k=scoville[0]
+    score=scoville[0]
     
-    while len(scoville)>=2 and scoville[0]<K:
-        s1 = heappop(scoville)
-        s2 = heappop(scoville)
-
-        k = s1 + (2*s2)
+    while scoville[0] < K and len(scoville)>=2:
+        f1 = heappop(scoville)
+        f2 = heappop(scoville)
+        score = f1 + 2*f2
         answer +=1
-        heappush(scoville, k)
-            
-    return answer if k>=K else -1
+        
+        heappush(scoville, score)
+
+        
+    return answer if score>=K else -1
