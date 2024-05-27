@@ -3,7 +3,6 @@ def solution(scoville, K):
     answer = 0
     heapify(scoville)
     
-    score=scoville[0]
     
     while scoville[0] < K and len(scoville)>=2:
         f1 = heappop(scoville)
@@ -14,4 +13,4 @@ def solution(scoville, K):
         heappush(scoville, score)
 
         
-    return answer if score>=K else -1
+    return answer if scoville[0]>=K else -1
