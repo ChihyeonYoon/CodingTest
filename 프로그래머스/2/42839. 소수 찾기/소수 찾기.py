@@ -13,15 +13,10 @@ def solution(numbers):
     for len_ in range(1,len(numbers)+1):
         permuts = permuts | set(permutations(numbers,len_))
     
-    print(permuts)
     permuts = set(int(''.join(p)) for p in permuts)
-    
-    print(permuts)
         
     for n in permuts:
         if is_prime(n) and n>1:
-            print(n)
             answers.add(n)
 
-    print(answers)
     return len(answers)
