@@ -9,8 +9,9 @@ def solution(numbers):
 
     answers = set()
     permuts = set()
+    
     for len_ in range(1,len(numbers)+1):
-        permuts= permuts | set(permutations(numbers,len_))
+        permuts = permuts | set(permutations(numbers,len_))
     
     print(permuts)
     permuts = set(int(''.join(p)) for p in permuts)
