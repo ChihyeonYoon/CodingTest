@@ -1,15 +1,19 @@
 from collections import deque
 def solution(numbers, target):
     answer = 0
-    queue = deque([(0, 0)]) # sum, level
+    queue = deque([(0, -1)]) # sum, level
     while queue:
         s, l = queue.popleft()
-        if l > len(numbers) or l < 0:
+        print(f"l: {l}, s: {s}")
+        if l > len(numbers):
             break
-        elif l == len(numbers) and s == target:
+        
+        elif l == len(numbers)-1 and s == target:
             answer += 1
-        queue.append((s+numbers[l-1], l+1))
-        queue.append((s-numbers[l-1], l+1))
+
+        elif 0<=l+1<len(numbers):
+            queue.append((s+numbers[l+1], l+1))
+            queue.append((s-numbers[l+1], l+1))
 
     return answer
 
